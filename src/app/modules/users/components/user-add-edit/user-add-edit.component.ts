@@ -52,8 +52,9 @@ export class UserAddEditComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {
+      console.log('FAILURE!!');
       return;
     }
-    console.log('SUCCESS!! :-)\n\n' + JSON.stringify(this.userForm.value))
+    console.log('SUCCESS!!\n' + JSON.stringify(this.userForm.value));
   }
 }
