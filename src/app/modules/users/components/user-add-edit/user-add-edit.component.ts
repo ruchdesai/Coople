@@ -13,8 +13,7 @@ export class UserAddEditComponent implements OnInit {
   set content(value: any) {
     if (value) {
       this._content = value;
-      const users = environment.USERS;
-      for (const user of users) {
+      for (const user of this.users) {
         if (user.id === this._content) {
           this.userData = user;
           this.generateForm();
@@ -27,6 +26,7 @@ export class UserAddEditComponent implements OnInit {
   userForm: FormGroup;
   submitted: boolean = false;
   selectedUserCountry: any;
+  users: any = environment.USERS;
   countries: any = environment.COUNTRIES;
 
   constructor(private _fb: FormBuilder) { }
@@ -39,14 +39,14 @@ export class UserAddEditComponent implements OnInit {
   get f() { return this.userForm.controls; }
 
   generateForm() {
+    this.selectedUserCountry = this.userData ? this.userData.address.country : '';
     this.userForm = this._fb.group({
       name: [this.userData ? this.userData.name : '', Validators.required],
       address: this._fb.group({
         zip: [this.userData ? this.userData.address.zip : '', Validators.required],
-        country: ['', Validators.required]
+        country: [this.selectedUserCountry, Validators.required]
       })
     });
-    this.selectedUserCountry = this.userData ? this.userData.address.country : '';
   }
 
   onSubmit() {
@@ -55,6 +55,13 @@ export class UserAddEditComponent implements OnInit {
       console.log('FAILURE!!');
       return;
     }
-    console.log('SUCCESS!!\n' + JSON.stringify(this.userForm.value));
+    const userUpdatedValues: any = this.userForm.value;
+    for (const user of this.users) {
+      if (user.id === this._content) {
+        user['name'] = userUpdatedValues.name;
+        user['address'] = userUpdatedValues.address;
+      }
+    }
+    console.log('SUCCESS!!\n' + JSON.stringify(userUpdatedValues));
   }
 }
