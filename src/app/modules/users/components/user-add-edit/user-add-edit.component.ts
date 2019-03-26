@@ -56,6 +56,10 @@ export class UserAddEditComponent implements OnInit {
       return;
     }
     const userUpdatedValues: any = this.userForm.value;
+    if (userUpdatedValues.id === undefined) {
+      userUpdatedValues['id'] = this.users.length + 1;
+      this.users.push(userUpdatedValues);
+    }
     for (const user of this.users) {
       if (user.id === this._content) {
         user['name'] = userUpdatedValues.name;
