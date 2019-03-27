@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
+import { UserService } from '../../user-service/user-service.service';
 
 @Component({
   selector: 'app-user-add-edit',
@@ -12,26 +13,31 @@ export class UserAddEditComponent implements OnInit {
   @Input()
   set content(value: any) {
     if (value) {
-      this._content = value;
+      this.compContent = value;
       for (const user of this.users) {
-        if (user.id === this._content) {
+        if (user.id === this.compContent) {
           this.userData = user;
           this.generateForm();
         }
       }
     }
   }
-  _content: any;
+  compContent: any;
   userData: any;
   userForm: FormGroup;
-  submitted: boolean = false;
-  selectedUserCountry: any;
+  submitted = false;
   users: any = environment.USERS;
-  countries: any = environment.COUNTRIES;
+  countries: any;
 
-  constructor(private _fb: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
+    this.userService.getCountries().subscribe((data) => {
+      this.countries = data;
+    });
     this.generateForm();
   }
 
@@ -39,33 +45,45 @@ export class UserAddEditComponent implements OnInit {
   get f() { return this.userForm.controls; }
 
   generateForm() {
-    this.selectedUserCountry = this.userData ? this.userData.address.country : '';
-    this.userForm = this._fb.group({
+    this.userForm = this.formBuilder.group({
       name: [this.userData ? this.userData.name : '', Validators.required],
-      address: this._fb.group({
-        zip: [this.userData ? this.userData.address.zip : '', Validators.required],
-        country: [this.selectedUserCountry, Validators.required]
+      address: this.formBuilder.group({
+        zip: [this.userData ? this.userData.address.zip : '', [
+          Validators.required,
+          Validators.pattern(/^ABC/),
+          Validators.minLength(5),
+          Validators.maxLength(5)
+        ]],
+        country: [this.userData ? this.userData.address.country : '', Validators.required]
       })
     });
+  }
+
+  onReset() {
+    this.userForm.reset();
+    this.compContent = '';
+    this.submitted = false;
   }
 
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {
-      console.log('FAILURE!!');
+      console.log('FAILURE - Incomplete form submitted.');
       return;
     }
     const userUpdatedValues: any = this.userForm.value;
-    if (userUpdatedValues.id === undefined) {
-      userUpdatedValues['id'] = this.users.length + 1;
-      this.users.push(userUpdatedValues);
-    }
-    for (const user of this.users) {
-      if (user.id === this._content) {
-        user['name'] = userUpdatedValues.name;
-        user['address'] = userUpdatedValues.address;
+    if (this.compContent) {
+      for (const user of this.users) {
+        if (user.id === this.compContent) {
+          user.name = userUpdatedValues.name;
+          user.address = userUpdatedValues.address;
+          this.onReset();
+        }
       }
+    } else {
+      userUpdatedValues.id = this.users.length + 1;
+      this.users.push(userUpdatedValues);
+      this.onReset();
     }
-    console.log('SUCCESS!!\n' + JSON.stringify(userUpdatedValues));
   }
 }

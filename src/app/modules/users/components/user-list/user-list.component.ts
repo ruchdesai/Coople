@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { UserService } from '../../user-service/user-service.service';
 
@@ -11,7 +11,7 @@ export class UserListComponent implements OnInit {
 
   users: any = environment.USERS;
 
-  constructor(private userService: UserService) { }
+  constructor( private userService: UserService ) { }
 
   ngOnInit() { }
 

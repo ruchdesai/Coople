@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { UserListComponent } from './user-list.component';
+import { FormatAddressPipe } from '../../../../pipes/format-address.pipe';
 
 describe('UserListComponent', () => {
   let component: UserListComponent;
@@ -8,7 +10,8 @@ describe('UserListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserListComponent ]
+      imports: [ HttpClientTestingModule ],
+      declarations: [ UserListComponent, FormatAddressPipe ]
     })
     .compileComponents();
   }));
@@ -21,5 +24,9 @@ describe('UserListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call sendUser()', () => {
+    component.sendUser(1);
   });
 });

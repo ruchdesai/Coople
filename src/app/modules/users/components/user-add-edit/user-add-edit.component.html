@@ -1,36 +1,36 @@
 <form [formGroup]="userForm" novalidate>
   <div class="form-group">
     <label>Full Name</label>
-    <input type="text" formControlName="name" placeholder="Enter your name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-        <div *ngIf="f.name.errors.required">Name is required</div>
+    <input type="text" formControlName="name" placeholder="Enter your name" class="form-control" [ngClass]="{ 'is-invalid': f.name.invalid && (submitted || f.name.touched) }" />
+    <div *ngIf="f.name.invalid || f.name.dirty" class="invalid-feedback">
+        <span *ngIf="f.name.errors.required">Name is required</span>
     </div>
   </div>
   <div formGroupName="address">
     <div class="form-group">
       <label>Postal/Zip</label>
-      <input type="text" formControlName="zip" placeholder="Postal Code/Zip" class="form-control" />
-      <div *ngIf="(submitted && f.address['controls']['zip'].invalid) && (f.address['controls']['zip'].dirty || f.address['controls']['zip'].touched)" class="invalid-feedback">
-        <span *ngIf="f.address['controls']['zip'].errors.required">
-          Postal/Zip is required
-        </span>
+      <input type="text" formControlName="zip" placeholder="Postal Code/Zip" class="form-control" [ngClass]="{ 'is-invalid': f.address['controls']['zip'].invalid && (submitted || f.address['controls']['zip'].touched) }" />
+      <div *ngIf="f.address['controls']['zip'].invalid && f.address['controls']['zip'].dirty" class="invalid-feedback">
+        <div *ngIf="f.address['controls']['zip'].errors.required">Postal/Zip is required</div>
+        <div *ngIf="f.address['controls']['zip'].errors.pattern">Postal/Zip must start with "ABC" in caps</div>  <!-- Can change regex to match both caps and small letters -->
+        <div *ngIf="f.address['controls']['zip'].errors.minlength">Postal/Zip must be 5 characters long</div>
+        <div *ngIf="f.address['controls']['zip'].errors.maxlength">Postal/Zip cannot be more than 5 characters</div>
       </div>
     </div>
     <div class="form-group">
       <label>Country</label>
-      <select formControlName="country" name="country" class="form-control">
-        <option value="" disabled>Select</option>
+      <select formControlName="country" name="country" class="form-control" [ngClass]="{ 'is-invalid': f.address['controls']['country'].invalid && (submitted && f.address['controls']['country'].errors) }">
+        <option value="" disabled selected>Select</option>
         <option *ngFor="let country of countries" [selected]="selectedUserCountry === country.name" [value]="country.name">{{country.name}}</option>
       </select>
-      <div *ngIf="(submitted && f.address['controls']['country'].invalid) && (f.address['controls']['country'].dirty || f.address['controls']['country'].touched)" class="invalid-feedback">
-        <span *ngIf="f.address['controls']['country'].errors.required">
-          Country is required
-        </span>
+      <div *ngIf="f.address['controls']['country'].invalid || f.address['controls']['country'].dirty" class="invalid-feedback">
+        <span *ngIf="f.address['controls']['country'].errors.required">Please select a country</span>
       </div>
     </div>
   </div>
-  <div class="form-group">
-    <button class="btn btn-success" (click)="onSubmit()">Submit</button>
+  <div class="form-group clearfix">
+    <button class="btn btn-success float-left" (click)="onSubmit()">Submit</button>
+    <button class="btn btn-danger float-right" (click)="onReset()">Reset</button>
   </div>
   <pre>{{userForm.value | json}}</pre>
 </form>
