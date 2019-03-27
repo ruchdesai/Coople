@@ -33,7 +33,7 @@
             "es5BrowserSupport": true
           },
           "configurations": {
-            "production": {
+            "production-en": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -42,6 +42,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
+              "outputPath": "dist/browser/en/",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
@@ -55,7 +56,42 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "baseHref": "/en/",
+              "i18nFile": "src/locale/messages.en.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "en",
+              "i18nMissingTranslation": "error"
+            },
+            "production-ru": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "outputPath": "dist/browser/ru/",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ],
+              "baseHref": "/ru/",
+              "i18nFile": "src/locale/messages.ru.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "ru",
+              "i18nMissingTranslation": "error"
             }
           }
         },
@@ -65,8 +101,11 @@
             "browserTarget": "Coople:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "Coople:build:production"
+            "production-en": {
+              "browserTarget": "Coople:build:production-en"
+            },
+            "production-ru": {
+              "browserTarget": "Coople:build:production-ru"
             }
           }
         },

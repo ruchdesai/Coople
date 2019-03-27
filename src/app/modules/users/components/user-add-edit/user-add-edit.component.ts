@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
-import { UserService } from '../../user-service/user-service.service';
 
 @Component({
   selector: 'app-user-add-edit',
@@ -27,17 +26,13 @@ export class UserAddEditComponent implements OnInit {
   userForm: FormGroup;
   submitted = false;
   users: any = environment.USERS;
-  countries: any;
+  countries: any = environment.COUNTRIES;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
-    this.userService.getCountries().subscribe((data) => {
-      this.countries = data;
-    });
     this.generateForm();
   }
 

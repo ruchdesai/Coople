@@ -1,35 +1,35 @@
 <form [formGroup]="userForm" novalidate>
   <div class="form-group">
-    <label>Full Name</label>
+    <label i18n="@@nameTitle">Full Name</label>
     <input type="text" formControlName="name" placeholder="Enter your name" class="form-control" [ngClass]="{ 'is-invalid': submitted || (f.name.touched && f.name.errors) }" />
     <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
-      <span *ngIf="f.name.errors.required">Name is required</span>
+      <span *ngIf="f.name.errors.required" i18n="@@nameError">Name is required</span>
     </div>
   </div>
   <div formGroupName="address">
     <div class="form-group">
-      <label>Postal/Zip</label>
+      <label i18n="@@zipTitle">Postal/Zip</label>
       <input type="text" formControlName="zip" placeholder="Postal Code/Zip" class="form-control" [ngClass]="{ 'is-invalid': submitted || (f.address['controls']['zip'].touched && f.address['controls']['zip'].errors) }" />
       <div *ngIf="f.address['controls']['zip'].touched && f.address['controls']['zip'].errors" class="invalid-feedback">
-        <div *ngIf="f.address['controls']['zip'].errors.required">Postal/Zip is required</div>
-        <div *ngIf="f.address['controls']['zip'].errors.pattern">Postal/Zip must start with "ABC" in caps</div>  <!-- Can change regex to match both caps and small letters -->
-        <div *ngIf="f.address['controls']['zip'].errors.minlength">Postal/Zip must be 5 characters long</div>
-        <div *ngIf="f.address['controls']['zip'].errors.maxlength">Postal/Zip cannot be more than 5 characters</div>
+        <div *ngIf="f.address['controls']['zip'].errors.required" i18n="@@zipReqError">Postal/Zip is required</div>
+        <div *ngIf="f.address['controls']['zip'].errors.pattern" i18n="@@zipLetterError">Postal/Zip must start with "ABC" in caps</div>  <!-- Can change regex to match both caps and small letters -->
+        <div *ngIf="f.address['controls']['zip'].errors.minlength" i18n="@@zipMustCharacter">Postal/Zip must be 5 characters long</div>
+        <div *ngIf="f.address['controls']['zip'].errors.maxlength" i18n="@@zipMoreThanCharatcer">Postal/Zip cannot be more than 5 characters</div>
       </div>
     </div>
     <div class="form-group">
-      <label>Country</label>
+      <label i18n="@@countryTitle">Country</label>
       <select formControlName="country" name="country" class="form-control" [ngClass]="{ 'is-invalid': submitted || (f.address['controls']['country'].touched && f.address['controls']['country'].errors) }">
         <option value="" disabled selected>Select</option>
         <option *ngFor="let country of countries" [selected]="selectedUserCountry === country.name" [value]="country.name">{{country.name}}</option>
       </select>
       <div *ngIf="f.address['controls']['country'].touched && f.address['controls']['country'].errors" class="invalid-feedback">
-        <span *ngIf="f.address['controls']['country'].errors.required">Please select a country</span>
+        <span *ngIf="f.address['controls']['country'].errors.required" i18n="@@countryError">Please select a country</span>
       </div>
     </div>
   </div>
   <div class="form-group clearfix">
-    <button class="btn btn-success float-left" (click)="onSubmit()">Submit</button>
-    <button class="btn btn-danger float-right" (click)="onReset()">Reset</button>
+    <button class="btn btn-success float-left" (click)="onSubmit()" i18n="@@submitBtn">Submit</button>
+    <button class="btn btn-danger float-right" (click)="onReset()" i18n="@@resetBtn">Reset</button>
   </div>
 </form>
