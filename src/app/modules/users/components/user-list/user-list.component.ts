@@ -15,7 +15,7 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() { }
 
-  sendUser(id) {
-    this.userService.sendUserValues(id);
+  sendUser(user) {
+    this.userService.sendUserValues(user);
   }
 }

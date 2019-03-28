@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
+import { UserService } from '../../user-service/user-service.service';
 
 @Component({
   selector: 'app-user-add-edit',
@@ -9,19 +10,6 @@ import { environment } from '../../../../../environments/environment';
 })
 export class UserAddEditComponent implements OnInit {
 
-  @Input()
-  set content(value: any) {
-    if (value) {
-      this.compContent = value;
-      for (const user of this.users) {
-        if (user.id === this.compContent) {
-          this.userData = user;
-          this.generateForm();
-        }
-      }
-    }
-  }
-  compContent: any;
   userData: any;
   userForm: FormGroup;
   submitted = false;
@@ -29,8 +17,16 @@ export class UserAddEditComponent implements OnInit {
   countries: any = environment.COUNTRIES;
 
   constructor(
-    private formBuilder: FormBuilder
-  ) { }
+    private formBuilder: FormBuilder,
+    private userService: UserService
+  ) {
+    this.userService.selectedUser$.subscribe((data) => {
+      if (data) {
+        this.userData = data;
+        this.setFormValues();
+      }
+    });
+  }
 
   ngOnInit() {
     this.generateForm();
@@ -41,22 +37,27 @@ export class UserAddEditComponent implements OnInit {
 
   generateForm() {
     this.userForm = this.formBuilder.group({
-      name: [this.userData ? this.userData.name : '', Validators.required],
+      name: ['', Validators.required],
       address: this.formBuilder.group({
-        zip: [this.userData ? this.userData.address.zip : '', [
+        zip: ['', [
           Validators.required,
           Validators.pattern(/^ABC/),
           Validators.minLength(5),
           Validators.maxLength(5)
         ]],
-        country: [this.userData ? this.userData.address.country : '', Validators.required]
+        country: ['', Validators.required]
       })
     });
   }
 
+  setFormValues() {
+    this.f.name.setValue(this.userData.name);
+    this.f.address.setValue(this.userData.address);
+  }
+
   onReset() {
     this.userForm.reset();
-    this.compContent = '';
+    this.userData = '';
     this.submitted = false;
   }
 
@@ -67,9 +68,9 @@ export class UserAddEditComponent implements OnInit {
       return;
     }
     const userUpdatedValues: any = this.userForm.value;
-    if (this.compContent) {
+    if (this.userData) {
       for (const user of this.users) {
-        if (user.id === this.compContent) {
+        if (user.id === this.userData.id) {
           user.name = userUpdatedValues.name;
           user.address = userUpdatedValues.address;
           this.onReset();

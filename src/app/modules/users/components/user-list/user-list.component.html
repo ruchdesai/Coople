@@ -2,6 +2,6 @@
 <ul class="list-group">
   <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of users">
     {{user.name}} - {{user.address | formatAddress}}
-    <span class="badge badge-primary badge-pill" (click)="sendUser(user.id)" i18n="@@editBtn">Edit</span>
+    <span class="badge badge-primary badge-pill" (click)="sendUser(user)" i18n="@@editBtn">Edit</span>
   </li>
 </ul>
