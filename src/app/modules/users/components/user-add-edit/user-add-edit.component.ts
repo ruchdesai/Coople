@@ -20,12 +20,7 @@ export class UserAddEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userService: UserService
   ) {
-    this.userService.selectedUser$.subscribe((data) => {
-      if (data) {
-        this.userData = data;
-        this.setFormValues();
-      }
-    });
+    this.getSelectedUserData();
   }
 
   ngOnInit() {
@@ -53,6 +48,15 @@ export class UserAddEditComponent implements OnInit {
   setFormValues() {
     this.f.name.setValue(this.userData.name);
     this.f.address.setValue(this.userData.address);
+  }
+
+  getSelectedUserData() {
+    this.userService.selectedUser$.subscribe((data) => {
+      if (data) {
+        this.userData = data;
+        this.setFormValues();
+      }
+    });
   }
 
   onReset() {
