@@ -10,10 +10,38 @@ import { UserService } from '../../user-service/user-service.service';
 })
 export class UserAddEditComponent implements OnInit {
 
+  /**
+   * Full user data
+   * @type {*}
+   * @memberof UserAddEditComponent
+   */
   userData: any;
+
+  /**
+   * User Form
+   * @type {FormGroup}
+   * @memberof UserAddEditComponent
+   */
   userForm: FormGroup;
+
+  /**
+   * Checks if userForm submitted
+   * @memberof UserAddEditComponent
+   */
   submitted = false;
+
+  /**
+   * Mock users list
+   * @type {*}
+   * @memberof UserAddEditComponent
+   */
   users: any = environment.USERS;
+
+  /**
+   * List of countries
+   * @type {*}
+   * @memberof UserAddEditComponent
+   */
   countries: any = environment.COUNTRIES;
 
   constructor(
@@ -27,9 +55,17 @@ export class UserAddEditComponent implements OnInit {
     this.generateForm();
   }
 
-  // convenience getter for easy access to form fields
+  /**
+   * convenience getter for easy access to form fields
+   * @readonly
+   * @memberof UserAddEditComponent
+   */
   get f() { return this.userForm.controls; }
 
+  /**
+   * Generates userForm
+   * @memberof UserAddEditComponent
+   */
   generateForm() {
     this.userForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -45,11 +81,19 @@ export class UserAddEditComponent implements OnInit {
     });
   }
 
+  /**
+   * Sets userForm values
+   * @memberof UserAddEditComponent
+   */
   setFormValues() {
     this.f.name.setValue(this.userData.name);
     this.f.address.setValue(this.userData.address);
   }
 
+  /**
+   * Gets selected user data from service call
+   * @memberof UserAddEditComponent
+   */
   getSelectedUserData() {
     this.userService.selectedUser$.subscribe((data) => {
       if (data) {
@@ -59,12 +103,21 @@ export class UserAddEditComponent implements OnInit {
     });
   }
 
+  /**
+   * Resets userForm
+   * @memberof UserAddEditComponent
+   */
   onReset() {
     this.userForm.reset();
     this.userData = '';
     this.submitted = false;
   }
 
+  /**
+   * Submits userForm
+   * @returns
+   * @memberof UserAddEditComponent
+   */
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {

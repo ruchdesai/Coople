@@ -9,12 +9,22 @@ import { UserService } from '../../user-service/user-service.service';
 })
 export class UserListComponent implements OnInit {
 
+  /**
+   * Mock users list
+   * @type {*}
+   * @memberof UserListComponent
+   */
   users: any = environment.USERS;
 
   constructor( private userService: UserService ) { }
 
   ngOnInit() { }
 
+  /**
+   * Sends user data to user service
+   * @param {*} user
+   * @memberof UserListComponent
+   */
   sendUser(user) {
     this.userService.sendUserValues(user);
   }
